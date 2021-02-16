@@ -1,24 +1,27 @@
-const criarNovaLinha = (nome, email) => {
-    const linhaNovoCliente  = document.createElement('tr')
-    const conteudo = `<td class="td" data-td>${nome}</td>
-    <td>${email}</td>
+const criarNovaLinha = (descricao, link) => {
+  const linhaNovoCliente = document.createElement("tr");
+  const conteudo = `<td class="td" data-td>${descricao}</td>
+    <td><a href="${link}">${link}</a></td>
     <td>
         <ul class="tabela__botoes-controle">
-            <li><a href="../telas/edita_cliente.html?id=${id}" class="botao-simples botao-simples--editar">Editar</a></li>
             <li><button class="botao-simples botao-simples--excluir" type="button">Excluir</button></li>
         </ul>
     </td>`;
-    
-    linhaNovoCliente.innerHTML = conteudo
-    return linhaNovoCliente
-}
 
-const http = new XMLHttpRequest()
+  linhaNovoCliente.innerHTML = conteudo;
+  return linhaNovoCliente;
+};
 
-http.open('GET', 'http://localhost:3000/profile')
-http.send()
+const tabela = document.querySelector("[data-tabela]");
+
+const http = new XMLHttpRequest();
+
+http.open("GET", "http://localhost:3000/profile");
+http.send();
 
 http.onload = () => {
-    const data = http.response
-    console.log(data)
-}
+  const data = JSON.parse(http.response);
+  data.forEach((element) => {
+    tabela.appendChild(criarNovaLinha(element.descricao, element.link));
+  });
+};
